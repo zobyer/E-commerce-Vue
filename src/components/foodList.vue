@@ -75,7 +75,7 @@
 export default {
     methods:{
       redirect_foodPage(){
-          this.$router.push({ name: 'About' })
+          this.$router.push({ name: 'allFoods' })
       }
   }
 

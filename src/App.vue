@@ -17,7 +17,7 @@
     </div>
   </div> 
 
-  <router-link :to="{name: 'News'}">News</router-link>
+  <router-link :to="{name: 'allFoods'}">Foods</router-link>
   <router-link :to="{name: 'Home'}">Home</router-link>
   
   <a href="javascript:void(0);" style="font-size:15px;" class="icon" @click="myFunction()">&#9776;</a>

@@ -19,31 +19,59 @@
     >
     </vue-particles>
     <div class="login-box">
-      <form action="" method="">
+      <form @submit.prevent="handleSubmit">
 		  <h1>লগইন করুন</h1>
 		  <div class="textbox">
 		
-		    <input type="text" name="username" placeholder="ব্যাবহারকারির নাম">
+		    <input type="text" name="username" v-model="username" placeholder="ব্যাবহারকারির নাম">
 		  </div>
 
 		  <div class="textbox">
 		    
-		    <input type="email" name="email" placeholder="ইমেইল">
+		    <input type="email" name="email" v-model="email" placeholder="ইমেইল">
 		  </div>
 
 		  <div class="textbox">
 		   
-		    <input type="password" name="password" placeholder="পাসওয়ার্ড">
+		    <input type="password" name="password" v-model="pass" placeholder="পাসওয়ার্ড">
 		  </div>
 
-		  <input type="button" class="btn" value="প্রবেশ করুন">
+		  <!-- <input type="button" class="btn" value="প্রবেশ করুন"> -->
+		  <button class="btn">প্রবেশ করুন</button>
 	</form>
     </div>
   </div>
 </template>
 
  <script>
-export default {};
+ import axios from 'axios'
+export default {
+	data() {
+		return{
+			username:'',
+			email:'',
+			pass:''
+		}
+	},
+	methods: {
+		handleSubmit(){
+			
+			axios.post('http://127.0.0.1:8000/api/store',{username:this.username, 
+			email: this.email,pass:this.pass})
+			.then(
+				res => {
+					console.log("success");
+					console.log(res);
+				}
+			).catch(
+				err =>{
+					console.log("error",users);
+					console.log(err);
+				}
+			)
+		}
+	}
+};
 </script>
 
  <style scoped>

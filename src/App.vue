@@ -5,16 +5,16 @@
     <router-link :to="{name: 'Home'}">Logo</router-link>
   </div>
   
-  <router-link :to="{name: 'About'}">About US</router-link>
+  <router-link :to="{name: 'Registration'}">রেজিস্ট্রেশন</router-link>
   <router-link :to="{name: 'Login'}">লগইন</router-link>
 
   <div class="dropdown">
-    <button class="dropbtn">Dropdown 
-      <i class="fa fa-caret-down"></i>
+    <button class="dropbtn">বিস্তারিত 
+      <font-awesome-icon :icon="['fas', 'chevron-down']"/>
     </button>
     <div class="dropdown-content">
-      <router-link :to="{name: 'Home'}">Home</router-link>
-      <router-link :to="{name: 'News'}">News</router-link>
+      <router-link :to="{name: 'About'}">আমাদের সম্পর্কে জানুন</router-link>
+      <router-link :to="{name: 'News'}">যোগাযোগ করুন</router-link>
     </div>
   </div> 
 

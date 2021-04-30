@@ -6,6 +6,7 @@
   </div>
   
   <router-link :to="{name: 'About'}">About US</router-link>
+  <router-link :to="{name: 'Login'}">লগইন</router-link>
 
   <div class="dropdown">
     <button class="dropbtn">Dropdown 
@@ -19,6 +20,10 @@
 
   <router-link :to="{name: 'allFoods'}">Foods</router-link>
   <router-link :to="{name: 'Home'}">Home</router-link>
+  <router-link :to="{name: 'Home'}" class="cart_container">
+    <font-awesome-icon class="cart_icon" :icon="['fas', 'cart-plus']" />
+    <span id='lblCartCount'>10</span>
+  </router-link>
   
   <a href="javascript:void(0);" style="font-size:15px;" class="icon" @click="myFunction()">&#9776;</a>
 
@@ -45,8 +50,12 @@ export default {
 }
 </script>
 
-<style scoped>
-body {margin:0;font-family:Arial}
+<style >
+@import url('https://fonts.googleapis.com/css2?family=Atma:wght@300&display=swap');
+
+body {margin:0  !important;
+    font-family: 'Atma', cursive;
+}
 
 .topnav {
   overflow: hidden;
@@ -129,6 +138,24 @@ body {margin:0;font-family:Arial}
 
 .dropdown:hover .dropdown-content {
   display: block;
+}
+.cart_container{
+  padding: 0;
+}
+
+.cart_icon{
+  font-size: 30px;
+  margin: 0;
+}
+
+#lblCartCount {
+    font-size: 20px;
+    vertical-align: top;
+    text-align: center;
+    background: #000;
+    color: white;
+    padding: 4px;
+    border-radius: 50%;
 }
 
 @media screen and (max-width: 600px) {

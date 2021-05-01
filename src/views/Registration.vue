@@ -40,7 +40,9 @@
             v-model="email"
             placeholder="ইমেইল"
             autocomplete="off"
+            @keyup="emailAvailable()"
           />
+          <label>{{Email_msg}} </label>
         </div>
 
         <div class="textbox">
@@ -83,12 +85,16 @@ export default {
       email: "",
       pass: "",
       confirm_pass:"",
+      Email_msg:"",
+      isAvailable:false,
     };
   },
   methods: {
     handleSubmit() {
       if ( this.username.trim() == '') return;
       if (this.pass != this.confirm_pass || this.pass=='' )return;
+      if ( this.isAvailable ) return;
+
       axios
         .post("http://127.0.0.1:8000/api/store", {
           username: this.username,
@@ -96,8 +102,9 @@ export default {
           pass: this.pass,
         })
         .then((res) => {
-          console.log("success");
-          console.log(res);
+          //console.log("success");
+          //console.log(res);
+          this.$router.push({name:'Login'});
         })
         .catch((err) => {
           console.log(err);
@@ -109,7 +116,31 @@ export default {
         }else{
             return true;
         }
-    }
+    },
+
+    emailAvailable(){
+      
+      if( this.email.length > 2){
+        axios.post("http://127.0.0.1:8000/api/user/validate-email",{
+          email:this.email
+        })
+        .then(response =>{
+          this.isAvailable = response.data;
+          if(this.isAvailable){
+            this.Email_msg = "Email Already Exist";
+            //console.log(response.data);
+          }else{
+            console.log("not found");
+            this.Email_msg="";
+
+          }
+        })
+        .catch(error=>{
+          console.log("email available checking error");
+        })
+      }
+    },
+
   },
 };
 </script>

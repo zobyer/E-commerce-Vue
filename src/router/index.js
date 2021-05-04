@@ -4,6 +4,9 @@ import News from '../views/News.vue'
 import allFoods from '../views/allFoods.vue'
 import Login from '../views/logIn.vue'
 import Registration from '../views/Registration.vue'
+import Orders from '../views/Order.vue'
+import Image from '../views/foodsInsert.vue'
+import singleFood from '../views/foodDetails.vue'
 
 
 const routes = [
@@ -12,10 +15,22 @@ const routes = [
     name: 'Home',
     component: Home
   },
+
+  {
+    path: '/my-orders',
+    name: 'Orders',
+    component: Orders
+  },
+
   {
     path: '/all-foods',
     name: 'allFoods',
     component: allFoods
+  },
+  {
+    path: '/food/:id',
+    name: 'singleFood',
+    component: singleFood
   },
   {
     path: '/news',
@@ -31,6 +46,11 @@ const routes = [
     path: '/registration',
     name: 'Registration',
     component: Registration
+  },
+  {
+    path: '/insert-img',
+    name: 'Image',
+    component: Image
   },
   {
     path: '/about',

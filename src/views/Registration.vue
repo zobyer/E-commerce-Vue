@@ -102,8 +102,8 @@ export default {
           pass: this.pass,
         })
         .then((res) => {
-          //console.log("success");
-          //console.log(res);
+          console.log("success");
+          console.log(res);
           this.$router.push({name:'Login'});
         })
         .catch((err) => {

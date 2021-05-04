@@ -14,4 +14,5 @@ library.add(fab)
 
 
 
+
 createApp(App).use(router).use(VueParticles).component('font-awesome-icon', FontAwesomeIcon).mount('#app')

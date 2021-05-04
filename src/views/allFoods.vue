@@ -1,72 +1,87 @@
-<template>
+<template >
   <div>
+    <div class="others"></div>
     <h1>খাবারের রাজ্যে আপনাকে স্বাগমত</h1>
     <div class="search_option">
-      <search-option />
+      <div class="container">
+        <div class="all_input">
+          <div class="inputdata">
+            <h4>Food Name</h4>
+            
+            <input
+              type="text"
+              placeholder="Search.."
+              name="food_name"
+              v-model="foodname"
+              autocomplete="off"
+              @input="filterfoodsname"
+              @focus="name_modal=true"
+            />
+            <button @click="searchbyname, name_modal=false, city_modal=false" >
+              <font-awesome-icon :icon="['fas', 'search']" />
+            </button>
+          </div>
+          <div v-if="filteredfoodname && name_modal" class="result">
+            <ul>
+              <li
+                v-for="(filteredfood, index) in filteredfoodname"
+                :key="index"
+                @click="setfood(filteredfood)"
+              >
+                {{ filteredfood }}
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="all_input">
+          <div class="inputdata">
+          <h4>City</h4>
+          <input
+              type="text"
+              placeholder="Search.."
+              
+              v-model="cityname"
+              autocomplete="off"
+              @input="filtercityname"
+              @focus="city_modal=true"
+            />
+          <button @click="searchbycity, name_modal=false, city_modal=false">
+            <font-awesome-icon :icon="['fas', 'search']" />
+          </button>
+        </div>
+        <div v-if="filteredcityname && city_modal" class="result">
+            <ul>
+              <li
+                v-for="(filteredcity, index) in filteredcityname"
+                :key="index"
+                @click="setcity(filteredcity)"
+              >
+                {{ filteredcity }}
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="main">
+
+    <div class="main" @click="name_modal=false, city_modal=false">
       <ul class="cards">
-        <li class="cards_item">
+        <li class="cards_item" v-for="foods in allfoods" v-bind:key="foods.id">
           <div class="card">
             <div class="card_image">
-              <img src="https://picsum.photos/500/300/?image=10" />
+              <img :src="foods.image" />
             </div>
             <div class="card_content">
-              <p>গোপালগঞ্জ জেলা: রসগোল্লা ও ছানার জিলাপি</p>
-              <p>মূল্য: ৫০০ টাকা</p>
-              <a href="#"><font-awesome-icon icon="cart-plus" /></a>
-            </div>
-          </div>
-        </li>
-
-        <li class="cards_item">
-          <div class="card">
-            <div class="card_image">
-              <img src="https://picsum.photos/500/300/?image=10" />
-            </div>
-            <div class="card_content">
-              <p>গোপালগঞ্জ জেলা: রসগোল্লা ও ছানার জিলাপি</p>
-              <p>মূল্য: ৫০০ টাকা</p>
-              <a href="#"><font-awesome-icon icon="cart-plus" /></a>
-            </div>
-          </div>
-        </li>
-
-        <li class="cards_item">
-          <div class="card">
-            <div class="card_image">
-              <img src="https://picsum.photos/500/300/?image=10" />
-            </div>
-            <div class="card_content">
-              <p>গোপালগঞ্জ জেলা: রসগোল্লা ও ছানার জিলাপি</p>
-              <p>মূল্য: ৫০০ টাকা</p>
-              <a href="#"><font-awesome-icon icon="cart-plus" /></a>
-            </div>
-          </div>
-        </li>
-
-        <li class="cards_item">
-          <div class="card">
-            <div class="card_image">
-              <img src="https://picsum.photos/500/300/?image=10" />
-            </div>
-            <div class="card_content">
-              <p>গোপালগঞ্জ জেলা: রসগোল্লা ও ছানার জিলাপি</p>
-              <p>মূল্য: ৫০০ টাকা</p>
-              <a href="#"><font-awesome-icon icon="cart-plus" /></a>
-            </div>
-          </div>
-        </li>
-
-        <li class="cards_item">
-          <div class="card">
-            <div class="card_image">
-              <img src="https://picsum.photos/500/300/?image=10" />
-            </div>
-            <div class="card_content">
-              <p>গোপালগঞ্জ জেলা: রসগোল্লা ও ছানার জিলাপি</p>
-              <p>মূল্য: ৫০০ টাকা</p>
-              <a href="#"><font-awesome-icon icon="cart-plus" /></a>
+              <p>{{ foods.name }}</p>
+              <p>{{ foods.zilla }}</p>
+              <p>{{ foods.price}} Tk.</p>
+              <div class="links">
+                <a href="#"><font-awesome-icon icon="cart-plus" /></a>
+                <router-link
+                  :to="{ name: 'singleFood', params: { id: foods.id } }"
+                  >বিস্তারিত</router-link
+                >
+              </div>
             </div>
           </div>
         </li>
@@ -85,11 +100,109 @@
 </template>
 
 <script>
-import searchOption from "../components/searchOption.vue";
+import axios from "axios";
+
 import PageFooter from "../components/pageFooter.vue";
 
 export default {
-  components: { searchOption, PageFooter },
+  components: { PageFooter },
+  data: function () {
+    return {
+      allfoods: null,
+      allfoodname: [],
+      filteredfoodname: [],
+      foodname: "",
+      name_modal:false,
+      all_cityname:[],
+      filteredcityname:[],
+      cityname:"",
+      city_modal:false,
+    };
+  },
+
+  methods: {
+    filterfoodsname() {
+      //console.log("filtering", this.name_modal);
+      this.filteredfoodname = this.allfoodname.filter((foodname) => {
+        return foodname.toLowerCase().startsWith(this.foodname.toLowerCase());
+      });
+    },
+
+    filtercityname(){
+      this.filteredcityname = this.all_cityname.filter((cityname) => {
+        return cityname.toLowerCase().startsWith(this.cityname.toLowerCase());
+      });
+    },
+
+    setfood(selectedname){
+      this.foodname = selectedname;
+      this.name_modal= false;
+    },
+    setcity(selectedcity){
+      this.cityname= selectedcity;
+      this.city_modal = false;
+    },
+
+    searchbycity(){
+      axios
+      .post("http://127.0.0.1:8000/api/foods/searchbycity",{
+          zilla : this.cityname
+      })
+      .then((response) => {
+        this.allfoods='';
+          this.allfoods =  response.data;
+          
+        //console.log(this.details);
+      })
+      .catch((err) => {
+         
+        console.log(err);
+      });
+    },
+
+    searchbyname(){
+      axios
+      .post("http://127.0.0.1:8000/api/foods/searchbyname",{
+          name : this.foodname
+      })
+      .then((response) => {
+          this.allfoods='';
+          this.allfoods =  response.data;
+          
+        //console.log(this.details);
+      })
+      .catch((err) => {
+         
+        console.log(err);
+      });
+    },
+  },
+
+  watch: {
+    foodname(){
+      this.filterfoodsname();
+    },
+    cityname(){
+      this.filtercityname();
+    }
+  },
+
+  mounted() {
+    axios
+      .get("http://127.0.0.1:8000/api/foods/allfoods")
+      .then((response) => {
+        this.allfoods = response.data;
+        for (let i = 0; i < response.data.length; i++) {
+          this.allfoodname[i] = response.data[i].name;
+          this.all_cityname[i] = response.data[i].zilla;
+          //console.log(response.data);
+        }
+        //console.log(this.all_cityname);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  },
 };
 </script>
 
@@ -141,6 +254,8 @@ h1 {
 img {
   height: auto;
   max-width: 100%;
+  width: 400px;
+  height: 280px;
   vertical-align: middle;
 }
 
@@ -173,6 +288,15 @@ img {
 .cards_item {
   display: flex;
   padding: 1rem;
+}
+
+.links {
+  display: flex;
+  justify-content: space-between;
+}
+
+.links a {
+  text-decoration: none;
 }
 
 @media (min-width: 40rem) {
@@ -227,6 +351,7 @@ img {
 .btn_container {
   display: flex;
   align-items: center;
+  margin: 10px 0;
 }
 
 .btn_container button {
@@ -240,8 +365,8 @@ img {
   transition: 0.5s;
 }
 
-.btn_container button:hover{
-    background: #333;
+.btn_container button:hover {
+  background: #333;
 }
 
 .card_text {
@@ -257,4 +382,65 @@ img {
   margin-top: 35px;
   text-align: center;
 }
+
+.container,
+.inputdata {
+  display: flex;
+  justify-content: space-evenly;
+  flex-direction: row;
+  margin: 0 20px;
+}
+
+.inputdata {
+  height: 30px;
+}
+
+.inputdata h4 {
+  margin: auto;
+}
+
+.inputdata input {
+  margin-left: 15px;
+}
+
+.inputdata button {
+  background: linear-gradient(to bottom left, #ef8d9c 40%, #ffc39e 100%);
+  border: none;
+}
+
+.result{
+
+  color: #ff0057;
+  width: 80%;
+  margin: 0 auto;
+  max-height: 100px;
+  overflow: scroll;
+  overflow-x: hidden;
+}
+
+.result ul{
+  list-style: none;
+}
+
+.result ul li{
+  text-align: center;
+  background: #333;
+  margin: 2px;
+  cursor: pointer;
+}
+
+.all_input{
+  
+}
+
+@media (max-width: 40rem) {
+  .container {
+    display: flex;
+    justify-content: space-evenly;
+    flex-direction: column;
+  }
+}
+
+
+
 </style>

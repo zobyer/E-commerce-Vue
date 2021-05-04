@@ -6,8 +6,8 @@
 
 <!--  for company name and description -->
     <div class="footer-items">
-      <h1>গ্রামীণ ফুড </h1>
-      <p>Description of any product or motto of the company.</p>
+      <h1>e-ঐতিহ্য food</h1>
+      <p>পেট ঠান্ডা তো জগৎ ঠান্ডা</p>
     </div>
 
 <!--  for quick links  -->
@@ -56,7 +56,7 @@
   
 <!--   Footer Bottom start  -->
   <div class="footer-bottom">
-    সত্ত্বাধিকারী &অনুলিপি ; গ্রামীণ ফুড.
+    সত্ত্বাধিকারী &অনুলিপি ; e-ঐতিহ্য food.
   </div>
 </div>
   

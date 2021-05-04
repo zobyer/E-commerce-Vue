@@ -5,7 +5,7 @@
           <div class="offers_name">
               <font-awesome-icon class="size_ic" :icon="['fas', 'ice-cream']" />
               <h3>সর্বোচ্চ মানের খাবার </h3>
-              <p>আমরা সর্বনিম্ন সময়ে পণ্য ডেলিভারি করে থাকি</p>
+              <p>সর্বোচ্চ গুণগত মানের খাবার সরবারহ করা আমাদের প্রধান উদ্দেশ্য</p>
           </div>
           <div class="offers_name">
               <font-awesome-icon class="size_ic" :icon="['fas', 'truck-moving']" />
@@ -15,7 +15,7 @@
           <div class="offers_name">
               <font-awesome-icon class="size_ic" :icon="['fas', 'hand-holding-usd']" />
               <h3>সবনিম্ন মূল্য</h3>
-              <p>আমরা সর্বনিম্ন সময়ে পণ্য ডেলিভারি করে থাকি</p>
+              <p>সর্বনিম্ন মূল্যের খাবার একমাত্র আমরাই দিয়ে থাকি</p>
           </div>
       </div>
   </div>

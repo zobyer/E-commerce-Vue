@@ -1,67 +1,22 @@
 <template>
   <body>
     <div class="container">
-        <div class="card">
+        <div class="card" v-for="(famous_food, index) in  famous_foods" :key="index">
             <div class="face face1">
                 <div class="content">
-                    <img src="https://images.unsplash.com/photo-1525351326368-efbb5cb6814d?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80">
-                    <h3>বাকরখানি, বিরিয়ানি</h3>
+                    <img :src="famous_food.image">
+                    <h3>{{famous_food.name}}</h3>
                 </div>
             </div>
             <div class="face face2">
                 <div class="content">
-                    <p>ঢাকা জেলা: বাকরখানি, বিরিয়ানি</p>
-                    <p>মূল্য: ৫০০ টাকা  </p>
+                    <p>Zilla: {{famous_food.zilla}}</p>
+                    <p>Price: {{famous_food.price}}</p>
                     <a href="#"><font-awesome-icon icon="cart-plus" /></a>
                 </div>
             </div>
         </div>
-        <div class="card">
-            <div class="face face1">
-                <div class="content">
-                    <img src="https://images.unsplash.com/photo-1509482560494-4126f8225994?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80">
-                    <h3>সাগর কলা</h3>
-                </div>
-            </div>
-            <div class="face face2">
-                <div class="content">
-                    <p>নরসিংদী জেলা: সাগর কলা</p>
-                    <p>মূল্য: ৫০০ টাকা  </p>
-                    <a href="#"><font-awesome-icon icon="cart-plus" /></a>
-                </div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="face face1">
-                <div class="content">
-                    <img src="https://images.unsplash.com/photo-1560684352-8497838a2229?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=456&q=80">
-                    <h3>খেজুরের গুঁড়</h3>
-                </div>
-            </div>
-            <div class="face face2">
-                <div class="content">
-                    <p>ফরিদপুর জেলা: খেজুরের গুঁড়</p>
-                    <p>মূল্য: ৫০০ টাকা  </p>
-                    <a href="#"><font-awesome-icon icon="cart-plus" /></a>
-                </div>
-            </div>
-        </div>
-
-        <div class="card">
-            <div class="face face1">
-                <div class="content">
-                    <img src="https://github.com/Jhonierpc/WebDevelopment/blob/master/CSS%20Card%20Hover%20Effects/img/launch_128.png?raw=true">
-                    <h3>রসগোল্লা ও ছানার জিলাপি</h3>
-                </div>
-            </div>
-            <div class="face face2">
-                <div class="content">
-                    <p>গোপালগঞ্জ জেলা: রসগোল্লা ও ছানার জিলাপি</p>
-                    <p>মূল্য: ৫০০ টাকা  </p>
-                    <a href="#"><font-awesome-icon icon="cart-plus" /></a>
-                </div>
-            </div>
-        </div>
+        
 
         <div class="btn_container">
             <button @click="redirect_foodPage">আরো দেখুন<font-awesome-icon icon="arrow-right" /></button>
@@ -73,10 +28,34 @@
 
 <script>
 export default {
+    data: function(){
+        return{
+            famous_foods:[]
+        }
+    },
     methods:{
       redirect_foodPage(){
           this.$router.push({ name: 'allFoods' })
-      }
+      },
+
+      
+  },
+
+  created(){
+      axios
+      .get("foods/famous",{
+          headers:{
+              Authorization : "Bearer 1|VlgkwJc9q965dptqQKq8xGedNv8UmB0lwMnGpCqX"
+          }
+      })
+      .then((response) => {
+        this.famous_foods = response.data.foods;
+        //console.log(this.famous_foods);
+      })
+      .catch((err) => {
+         
+        console.log(err);
+      });
   }
 
 }

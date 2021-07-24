@@ -17,7 +17,7 @@
               @input="filterfoodsname"
               @focus="name_modal=true"
             />
-            <button @click="searchbyname, name_modal=false, city_modal=false" >
+            <button @click="searchbyname(), name_modal=false, city_modal=false" >
               <font-awesome-icon :icon="['fas', 'search']" />
             </button>
           </div>
@@ -79,7 +79,7 @@
                 <a href="#"><font-awesome-icon icon="cart-plus" /></a>
                 <router-link
                   :to="{ name: 'singleFood', params: { id: foods.id } }"
-                  >বিস্তারিত</router-link
+                  >Details</router-link
                 >
               </div>
             </div>
@@ -88,7 +88,7 @@
 
         <li class="btn_container">
           <button @click="redirect_foodPage">
-            আরো দেখুন<font-awesome-icon icon="arrow-right" />
+            See More<font-awesome-icon icon="arrow-right" />
           </button>
         </li>
       </ul>
@@ -100,7 +100,6 @@
 </template>
 
 <script>
-import axios from "axios";
 
 import PageFooter from "../components/pageFooter.vue";
 
@@ -145,12 +144,14 @@ export default {
 
     searchbycity(){
       axios
-      .post("http://127.0.0.1:8000/api/foods/searchbycity",{
-          zilla : this.cityname
+      .post("foods/search/city?name="+this.cityname,{
+          headers:{
+            Authorization : "Bearer 1|VlgkwJc9q965dptqQKq8xGedNv8UmB0lwMnGpCqX"
+          }
       })
       .then((response) => {
         this.allfoods='';
-          this.allfoods =  response.data;
+          this.allfoods =  response.data.foods;
           
         //console.log(this.details);
       })
@@ -161,15 +162,18 @@ export default {
     },
 
     searchbyname(){
+      console.log("called")
       axios
-      .post("http://127.0.0.1:8000/api/foods/searchbyname",{
-          name : this.foodname
+      .get("foods/search/food?name="+this.foodname,{
+        headers:{
+          Authorization : "Bearer 1|VlgkwJc9q965dptqQKq8xGedNv8UmB0lwMnGpCqX"
+        }
       })
       .then((response) => {
           this.allfoods='';
-          this.allfoods =  response.data;
+          this.allfoods =  response.data.foods;
           
-        //console.log(this.details);
+          //console.log(this.allfoods);
       })
       .catch((err) => {
          
@@ -187,17 +191,23 @@ export default {
     }
   },
 
-  mounted() {
+  created() {
     axios
-      .get("http://127.0.0.1:8000/api/foods/allfoods")
+      .get("foods/all",
+      {
+          headers:{
+              Authorization : "Bearer 1|VlgkwJc9q965dptqQKq8xGedNv8UmB0lwMnGpCqX"
+          }
+      }
+      )
       .then((response) => {
-        this.allfoods = response.data;
-        for (let i = 0; i < response.data.length; i++) {
-          this.allfoodname[i] = response.data[i].name;
-          this.all_cityname[i] = response.data[i].zilla;
+        this.allfoods = response.data.foods;
+        for (let i = 0; i < response.data.foods.length; i++) {
+          this.allfoodname[i] = response.data.foods[i].name;
+          this.all_cityname[i] = response.data.foods[i].zilla;
           //console.log(response.data);
         }
-        //console.log(this.all_cityname);
+        //console.log(this.allfoods);
       })
       .catch((err) => {
         console.log(err);

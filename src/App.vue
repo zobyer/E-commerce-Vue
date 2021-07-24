@@ -4,38 +4,40 @@
       <router-link :to="{ name: 'Home' }">Logo</router-link>
     </div>
 
-    <router-link :to="{ name: 'Registration' }">রেজিস্ট্রেশন</router-link>
-    <router-link :to="{ name: 'Login' }">লগইন</router-link>
+    <router-link :to="{ name: 'allFoods' }">About Us</router-link>
+    <router-link :to="{ name: 'Home' }">Contact Us</router-link>
 
-    <div class="dropdown">
+    <router-link :to="{ name: 'Registration' }" v-if="!loggedin">Registration</router-link>
+    <router-link :to="{ name: 'Login' }" v-if="!loggedin">Login</router-link>
+
+    <!-- <div class="dropdown">
       <button class="dropbtn">
-        বিস্তারিত
+        Details
         <font-awesome-icon :icon="['fas', 'chevron-down']" />
       </button>
       <div class="dropdown-content">
-        <router-link :to="{ name: 'About' }">আমাদের সম্পর্কে জানুন</router-link>
-        <router-link :to="{ name: 'News' }">যোগাযোগ করুন</router-link>
+        <router-link :to="{ name: 'About' }">Contact Us</router-link>
+        <router-link :to="{ name: 'News' }">Contact Us</router-link>
       </div>
-    </div>
+    </div> -->
 
     <router-link :to="{ name: 'allFoods' }">Foods</router-link>
     <router-link :to="{ name: 'Home' }">Home</router-link>
-
+    
     <div class="dropdown">
       <button class="dropbtn">
         <font-awesome-icon class="cart_icon" :icon="['fas', 'user']" />
         <font-awesome-icon :icon="['fas', 'chevron-down']" />
         <h5 v-if="loggedin">{{ name }}</h5>
-        <!-- <label v-if="loggedin">{{name}}</label> -->
+        
       </button>
       <div class="dropdown-content">
         <button v-if="loggedin" @click="logout" class="drop_button">
-          লগ আউট
+         Log Out
         </button>
-        <router-link v-else class="drop_button" :to="{ name: 'Login' }">লগইন</router-link>
+        <router-link v-else class="drop_button" :to="{ name: 'Login' }">Log In</router-link>
 
-        <!-- <router-link @click="hell">আমাদের সম্পর্কে জানুন</router-link> -->
-        <router-link :to="{ name: 'News' }">যোগাযোগ করুন</router-link>
+        <router-link :to="{ name: 'News' }">Contact Us</router-link>
       </div>
     </div>
 
@@ -57,7 +59,6 @@
 </template>
 
 <script>
-import axios from "axios";
 
 export default {
   data() {
@@ -100,7 +101,7 @@ export default {
       } else {
         this.loggedin = false;
       }
-      //console.log(localStorage.getItem("islogged"), this.loggedin);
+      console.log(localStorage.getItem("islogged"), this.loggedin);
     },
   },
 };

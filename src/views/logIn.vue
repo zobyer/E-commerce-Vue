@@ -20,14 +20,14 @@
     </vue-particles>
     <div class="login-box">
       <form @submit.prevent="handleSubmit">
-        <h1>লগইন করুন</h1>
+        <h1>Log In</h1>
 
         <div class="textbox">
           <input
             type="email"
             name="email"
             v-model="email"
-            placeholder="ইমেইল"
+            placeholder="E-mail"
           />
         </div>
 
@@ -36,21 +36,20 @@
             type="password"
             name="password"
             v-model="pass"
-            placeholder="পাসওয়ার্ড"
+            placeholder="Password"
           />
         </div>
 
-        <label v-if="!valid_check">ইমেইল পাসওয়ার্ড মিল পাওয়া যায়নি</label>
+        <label v-if="!valid_check">Submitted Credentials Does not Matched</label>
 
         <!-- <input type="button" class="btn" value="প্রবেশ করুন"> -->
-        <button class="btn">প্রবেশ করুন</button>
+        <button class="btn">Login</button>
       </form>
     </div>
   </div>
 </template>
 
  <script>
-import axios from "axios";
 export default {
   name: "login",
   data() {
@@ -63,36 +62,30 @@ export default {
   },
   methods: {
     handleSubmit() {
-      axios.defaults.headers.common = {
-        "X-Requested-With": "XMLHttpRequest",
-        "X-CSRF-TOKEN": window.csrf_token,
-      };
+      
       axios
         .post(
-          "http://127.0.0.1:8000/api/user/login",
+          "login",
 
           {
             email: this.email,
-            pass: this.pass,
+            password: this.pass,
           }
         )
         .then((res) => {
           this.valid_check = true;
-          this.is_logged = true;
          
-          localStorage.setItem('id', res.data[0].id);
-          localStorage.setItem('username', res.data[0].name);
-          localStorage.setItem('islogged', true);
-
+          localStorage.setItem('id', res.data.user.id);
+          localStorage.setItem('username', res.data.user.name);
+          localStorage.setItem('token', res.data.token);
+          localStorage.setItem('islogged', "true");
+          //console.log(localStorage.getItem('token'));
           this.$router.push({ name: "Home",
           });
-          //console.log("success");
-          //console.log(this.$session.get('id'));
         })
         .catch((err) => {
-          localStorage.setItem('islogged', false);
+          localStorage.setItem('islogged', "false");
           this.valid_check = false;
-          console.log("error");
           console.log(err);
         });
     },

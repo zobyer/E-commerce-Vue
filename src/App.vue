@@ -41,10 +41,6 @@
       </div>
     </div>
 
-    <router-link :to="{ name: 'Orders' }" class="cart_container">
-      <font-awesome-icon class="cart_icon" :icon="['fas', 'cart-plus']" />
-      <span id="lblCartCount">10</span>
-    </router-link>
 
     <a
       href="javascript:void(0);"

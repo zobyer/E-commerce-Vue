@@ -77,7 +77,7 @@ export default {
 	background: #333;
 	display: block;
     font-family: 'Atma', cursive;
-
+	bottom: 0;
  }
 
  .inner-footer {

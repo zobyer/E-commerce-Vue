@@ -1,72 +1,126 @@
 <template>
-<div>
-    <h1>অর্ডার তালিকা</h1>
+  <div class="table-container">
+    <h1>Order List</h1>
 
-<table>
-  <tr>
-    <th>Company</th>
-    <th>Contact</th>
-    <th>Country</th>
-  </tr>
-  <tr>
-    <td>Alfreds Futterkiste</td>
-    <td>Maria Anders</td>
-    <td>Germany</td>
-  </tr>
-  <tr>
-    <td>Centro comercial Moctezuma</td>
-    <td>Francisco Chang</td>
-    <td>Mexico</td>
-  </tr>
-  <tr>
-    <td>Ernst Handel</td>
-    <td>Roland Mendel</td>
-    <td>Austria</td>
-  </tr>
-  <tr>
-    <td>Island Trading</td>
-    <td>Helen Bennett</td>
-    <td>UK</td>
-  </tr>
-  <tr>
-    <td>Laughing Bacchus Winecellars</td>
-    <td>Yoshi Tannamuri</td>
-    <td>Canada</td>
-  </tr>
-  <tr>
-    <td>Magazzini Alimentari Riuniti</td>
-    <td>Giovanni Rovelli</td>
-    <td>Italy</td>
-  </tr>
-</table>
-</div>
-<page-footer />
+    <table>
+      <tr>
+        <th>Sl</th>
+        <th>Name</th>
+        <th>Zilla</th>
+        <th>Total</th>
+        <th>Price</th>
+        <th>Details</th>
+        <th>Remove</th>
+      </tr>
+      <tr v-for="order in orders" :key="order.id">
+        <td>{{ 1 }}</td>
+        <td>{{ order.name }}</td>
+        <td>{{ order.zilla }}</td>
+        <td>{{ order.total }}</td>
+        <td>
+          {{ order.price * order.total }} ({{ order.price }} *
+          {{ order.total }}) Tk
+        </td>
+        <td>
+          <router-link :to="{ name: 'singleFood', params: { id: order.id } }"
+            >See Details</router-link
+          >
+        </td>
+        <td><button v-on:click="removefromcart(order.id)">remove</button></td>
+       
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>Total Price</td>
+        <td>{{totaltk}}</td>
+        <td></td>
+      </tr>
+    </table>
+  </div>
+  <page-footer />
 </template>
 
 <script>
-import pageFooter from '../components/pageFooter.vue'
+import pageFooter from "../components/pageFooter.vue";
 export default {
   components: { pageFooter },
+  data: function () {
+    return {
+      orders: null,
+      totaltk:0
+    };
+  },
+  methods: {
+    removefromcart(food_id) {
+      axios
+        .post(
+          "cart/delete",
+          {
+            user_id: localStorage.getItem("id"),
+            food_id: food_id,
+          },
+          {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("token"),
+            },
+          }
+        )
+        .then((response) => {
+          //this.$refs.updatecart.getcart();
+          //console.log("called");
+          this.getorders()
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
 
-}
+    getorders() {
+      axios
+        .get("orders/all/" + localStorage.getItem("id"), {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("token"),
+          },
+        })
+        .then((response) => {
+          this.orders = response.data.data;
+          this.totaltk = response.data.totalprice
+          //console.log(this.orders);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+  
+  },
+  created() {
+    this.getorders();
+  },
+};
 </script>
 
 <style>
-
+.table-container {
+  min-height: 490px;
+  margin: 20px;
+}
 table {
   font-family: arial, sans-serif;
   border-collapse: collapse;
   width: 100%;
 }
 
-td, th {
+td,
+th {
   border: 1px solid #dddddd;
-  text-align: left;
+  text-align: center;
   padding: 8px;
 }
 
 tr:nth-child(even) {
   background-color: #dddddd;
 }
-
 </style>

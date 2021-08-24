@@ -1,4 +1,5 @@
 <template >
+  <cart ref="updatecart"/>
   <div>
     <div class="others"></div>
     <h1>খাবারের রাজ্যে আপনাকে স্বাগমত</h1>
@@ -7,7 +8,7 @@
         <div class="all_input">
           <div class="inputdata">
             <h4>Food Name</h4>
-            
+
             <input
               type="text"
               placeholder="Search.."
@@ -15,9 +16,13 @@
               v-model="foodname"
               autocomplete="off"
               @input="filterfoodsname"
-              @focus="name_modal=true"
+              @focus="name_modal = true"
             />
-            <button @click="searchbyname(), name_modal=false, city_modal=false" >
+            <button
+              @click="
+                searchbyname(), (name_modal = false), (city_modal = false)
+              "
+            >
               <font-awesome-icon :icon="['fas', 'search']" />
             </button>
           </div>
@@ -35,21 +40,24 @@
         </div>
         <div class="all_input">
           <div class="inputdata">
-          <h4>City</h4>
-          <input
+            <h4>City</h4>
+            <input
               type="text"
               placeholder="Search.."
-              
               v-model="cityname"
               autocomplete="off"
               @input="filtercityname"
-              @focus="city_modal=true"
+              @focus="city_modal = true"
             />
-          <button @click="searchbycity, name_modal=false, city_modal=false">
-            <font-awesome-icon :icon="['fas', 'search']" />
-          </button>
-        </div>
-        <div v-if="filteredcityname && city_modal" class="result">
+            <button
+              @click="
+                searchbycity(), (name_modal = false), (city_modal = false)
+              "
+            >
+              <font-awesome-icon :icon="['fas', 'search']" />
+            </button>
+          </div>
+          <div v-if="filteredcityname && city_modal" class="result">
             <ul>
               <li
                 v-for="(filteredcity, index) in filteredcityname"
@@ -64,7 +72,7 @@
       </div>
     </div>
 
-    <div class="main" @click="name_modal=false, city_modal=false">
+    <div class="main" @click="(name_modal = false), (city_modal = false)">
       <ul class="cards">
         <li class="cards_item" v-for="foods in allfoods" v-bind:key="foods.id">
           <div class="card">
@@ -74,9 +82,9 @@
             <div class="card_content">
               <p>{{ foods.name }}</p>
               <p>{{ foods.zilla }}</p>
-              <p>{{ foods.price}} Tk.</p>
+              <p>{{ foods.price }} Tk.</p>
               <div class="links">
-                <a href="#"><font-awesome-icon icon="cart-plus" /></a>
+                <a href="#" v-on:click="addtocart(foods.id)"><font-awesome-icon icon="cart-plus" /></a>
                 <router-link
                   :to="{ name: 'singleFood', params: { id: foods.id } }"
                   >Details</router-link
@@ -100,22 +108,23 @@
 </template>
 
 <script>
-
+import Cart from "../components/cart.vue";
 import PageFooter from "../components/pageFooter.vue";
 
 export default {
-  components: { PageFooter },
+  components: { PageFooter, Cart },
   data: function () {
     return {
       allfoods: null,
       allfoodname: [],
       filteredfoodname: [],
       foodname: "",
-      name_modal:false,
-      all_cityname:[],
-      filteredcityname:[],
-      cityname:"",
-      city_modal:false,
+      name_modal: false,
+      all_cityname: [],
+      filteredcityname: [],
+      cityname: "",
+      city_modal: false,
+      item: 5,
     };
   },
 
@@ -127,79 +136,97 @@ export default {
       });
     },
 
-    filtercityname(){
+    filtercityname() {
       this.filteredcityname = this.all_cityname.filter((cityname) => {
         return cityname.toLowerCase().startsWith(this.cityname.toLowerCase());
       });
     },
 
-    setfood(selectedname){
+    setfood(selectedname) {
       this.foodname = selectedname;
-      this.name_modal= false;
+      this.name_modal = false;
     },
-    setcity(selectedcity){
-      this.cityname= selectedcity;
+    setcity(selectedcity) {
+      this.cityname = selectedcity;
       this.city_modal = false;
     },
 
-    searchbycity(){
+    searchbycity() {
       axios
-      .post("foods/search/city?name="+this.cityname,{
-          headers:{
-            Authorization : "Bearer 1|VlgkwJc9q965dptqQKq8xGedNv8UmB0lwMnGpCqX"
-          }
-      })
-      .then((response) => {
-        this.allfoods='';
-          this.allfoods =  response.data.foods;
-          
-        //console.log(this.details);
-      })
-      .catch((err) => {
-         
-        console.log(err);
-      });
+        .get("foods/search/city?name=" + this.cityname, {
+          headers: {
+            Authorization: "Bearer "+localStorage.getItem("token"),
+          },
+        })
+        .then((response) => {
+          this.allfoods = "";
+          this.allfoods = response.data.foods;
+
+          //console.log(this.details);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
 
-    searchbyname(){
-      console.log("called")
+    searchbyname() {
+      console.log("called");
       axios
-      .get("foods/search/food?name="+this.foodname,{
-        headers:{
-          Authorization : "Bearer 1|VlgkwJc9q965dptqQKq8xGedNv8UmB0lwMnGpCqX"
-        }
-      })
-      .then((response) => {
-          this.allfoods='';
-          this.allfoods =  response.data.foods;
-          
+        .get("foods/search/food?name=" + this.foodname, {
+          headers: {
+            Authorization: "Bearer "+localStorage.getItem("token"),
+          },
+        })
+        .then((response) => {
+          this.allfoods = "";
+          this.allfoods = response.data.foods;
+
           //console.log(this.allfoods);
-      })
-      .catch((err) => {
-         
-        console.log(err);
-      });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+
+    addtocart(foodid) {
+      //console.log(localStorage.getItem("token"))
+      axios
+        .post("cart/add" ,
+        {
+          user_id : localStorage.getItem("id"),
+          food_id: foodid
+        },
+        {
+          headers: {
+            Authorization: "Bearer "+localStorage.getItem("token"),
+          },
+        })
+        .then((response) => {
+          this.$refs.updatecart.getcart()
+          //console.log("called");
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
   },
 
   watch: {
-    foodname(){
+    foodname() {
       this.filterfoodsname();
     },
-    cityname(){
+    cityname() {
       this.filtercityname();
-    }
+    },
   },
 
   created() {
     axios
-      .get("foods/all",
-      {
-          headers:{
-              Authorization : "Bearer 1|VlgkwJc9q965dptqQKq8xGedNv8UmB0lwMnGpCqX"
-          }
-      }
-      )
+      .get("foods/all", {
+        headers: {
+          Authorization: "Bearer 1|VlgkwJc9q965dptqQKq8xGedNv8UmB0lwMnGpCqX",
+        },
+      })
       .then((response) => {
         this.allfoods = response.data.foods;
         for (let i = 0; i < response.data.foods.length; i++) {
@@ -418,8 +445,7 @@ img {
   border: none;
 }
 
-.result{
-
+.result {
   color: #ff0057;
   width: 80%;
   margin: 0 auto;
@@ -428,19 +454,18 @@ img {
   overflow-x: hidden;
 }
 
-.result ul{
+.result ul {
   list-style: none;
 }
 
-.result ul li{
+.result ul li {
   text-align: center;
   background: #333;
   margin: 2px;
   cursor: pointer;
 }
 
-.all_input{
-  
+.all_input {
 }
 
 @media (max-width: 40rem) {
@@ -450,7 +475,4 @@ img {
     flex-direction: column;
   }
 }
-
-
-
 </style>

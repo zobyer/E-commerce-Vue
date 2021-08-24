@@ -45,12 +45,12 @@ export default {
       axios
       .get("foods/famous",{
           headers:{
-              Authorization : "Bearer 1|VlgkwJc9q965dptqQKq8xGedNv8UmB0lwMnGpCqX"
+              Authorization : "Bearer "+localStorage.getItem("token")
           }
       })
       .then((response) => {
         this.famous_foods = response.data.foods;
-        //console.log(this.famous_foods);
+        //console.log(localStorage.getItem("token"));
       })
       .catch((err) => {
          

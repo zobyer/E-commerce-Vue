@@ -27,7 +27,6 @@
           >
         </td>
         <td><button v-on:click="removefromcart(order.id)">remove</button></td>
-       
       </tr>
       <tr>
         <td></td>
@@ -35,22 +34,25 @@
         <td></td>
         <td></td>
         <td>Total Price</td>
-        <td>{{totaltk}}</td>
-        <td></td>
+        <td>{{ totaltk }}</td>
+        <td><button>Place Order</button></td>
       </tr>
     </table>
   </div>
+  <order-modal />
+
   <page-footer />
 </template>
 
 <script>
+import OrderModal from '../components/orderModal.vue';
 import pageFooter from "../components/pageFooter.vue";
 export default {
-  components: { pageFooter },
+  components: { pageFooter, OrderModal },
   data: function () {
     return {
       orders: null,
-      totaltk:0
+      totaltk: 0,
     };
   },
   methods: {
@@ -71,7 +73,7 @@ export default {
         .then((response) => {
           //this.$refs.updatecart.getcart();
           //console.log("called");
-          this.getorders()
+          this.getorders();
         })
         .catch((err) => {
           console.log(err);
@@ -87,14 +89,13 @@ export default {
         })
         .then((response) => {
           this.orders = response.data.data;
-          this.totaltk = response.data.totalprice
+          this.totaltk = response.data.totalprice;
           //console.log(this.orders);
         })
         .catch((err) => {
           console.log(err);
         });
     },
-  
   },
   created() {
     this.getorders();
@@ -122,5 +123,8 @@ th {
 
 tr:nth-child(even) {
   background-color: #dddddd;
+}
+
+.order_btn {
 }
 </style>

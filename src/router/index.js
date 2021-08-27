@@ -7,6 +7,8 @@ import Registration from '../views/Registration.vue'
 import Orders from '../views/Order.vue'
 import Image from '../views/foodsInsert.vue'
 import singleFood from '../views/foodDetails.vue'
+import placedOrders from '../views/placeOrders.vue'
+import insertFood from '../views/Admin/insertfood.vue'
 
 
 const routes = [
@@ -51,6 +53,16 @@ const routes = [
     path: '/insert-img',
     name: 'Image',
     component: Image
+  },
+  {
+    path: '/my-orders',
+    name: 'placedOrders',
+    component: placedOrders
+  },
+  {
+    path: '/admin/insert-food',
+    name: 'insertFood',
+    component: insertFood
   },
   {
     path: '/about',

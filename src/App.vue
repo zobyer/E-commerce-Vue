@@ -4,10 +4,12 @@
       <router-link :to="{ name: 'Home' }">Logo</router-link>
     </div>
 
-    <router-link :to="{ name: 'allFoods' }">About Us</router-link>
+    <router-link :to="{ name: 'About' }">About Us</router-link>
     <router-link :to="{ name: 'Home' }">Contact Us</router-link>
 
-    <router-link :to="{ name: 'Registration' }" v-if="!loggedin">Registration</router-link>
+    <router-link :to="{ name: 'Registration' }" v-if="!loggedin"
+      >Registration</router-link
+    >
     <router-link :to="{ name: 'Login' }" v-if="!loggedin">Login</router-link>
 
     <!-- <div class="dropdown">
@@ -23,24 +25,24 @@
 
     <router-link :to="{ name: 'allFoods' }">Foods</router-link>
     <router-link :to="{ name: 'Home' }">Home</router-link>
-    
+
     <div class="dropdown">
       <button class="dropbtn">
         <font-awesome-icon class="cart_icon" :icon="['fas', 'user']" />
         <font-awesome-icon :icon="['fas', 'chevron-down']" />
         <h5 v-if="loggedin">{{ name }}</h5>
-        
       </button>
       <div class="dropdown-content">
         <button v-if="loggedin" @click="logout" class="drop_button">
-         Log Out
+          Log Out
         </button>
-        <router-link v-else class="drop_button" :to="{ name: 'Login' }">Log In</router-link>
+        <router-link v-else class="drop_button" :to="{ name: 'Login' }"
+          >Log In</router-link
+        >
 
-        <router-link :to="{ name: 'News' }">Contact Us</router-link>
+        <router-link :to="{ name: 'placedOrders' }" v-if="loggedin">My Orders</router-link>
       </div>
     </div>
-
 
     <a
       href="javascript:void(0);"
@@ -55,7 +57,6 @@
 </template>
 
 <script>
-
 export default {
   data() {
     return {
@@ -225,6 +226,17 @@ body {
   color: white;
   padding: 4px;
   border-radius: 50%;
+}
+
+/*sweet alert style */
+.swal2-title{
+  font-family: 'Open Sans', sans-serif;
+  font-size: 20px !important;
+}
+
+
+.swal2-popup {
+  font-size: 0.5rem !important;
 }
 
 @media screen and (max-width: 600px) {

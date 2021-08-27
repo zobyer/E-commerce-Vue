@@ -102,16 +102,26 @@ export default {
   z-index: 50;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
   max-width: 500px;
   text-align: center;
   border-radius: 15px;
-  border: 1px solid black;
+  /* border: 1px solid black; */
   background: white;
+  animation-name: modal_animation;
+  animation-duration: 1.5s;
+  transform: translate(-50%, -50%);
+}
+
+@keyframes modal_animation {
+  0%   {transform: translate(-50%, -40%);}
+  /* 25%  {transform: translate(-50%, -50%);}
+  50%  {transform: translate(-50%, -50%);}
+  75%  {transform: translate(-50%, -50%);} */
+  100% {transform: translate(-50%, -50%);}
 }
 
 .address_container {
-  max-height: 200px;
+  max-height: 150px;
   overflow-y: scroll;
   overflow-x: hidden;
 }

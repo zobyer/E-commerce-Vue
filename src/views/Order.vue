@@ -2,8 +2,8 @@
   <div class="table-container">
     <h1>Order List</h1>
     <p>
-      <span> Address: {{ address.description }},    </span>
-      <span v-if="address.phone_no">Contact No: {{ address.phone_no }}    </span>
+      <span> Address: {{ address.description }}, </span>
+      <span v-if="address.phone_no">Contact No: {{ address.phone_no }} </span>
       <span @click="modalvisible = true" class="address_btn"
         ><font-awesome-icon :icon="['fas', 'plus']"
       /></span>
@@ -18,8 +18,8 @@
         <th>Details</th>
         <th>Remove</th>
       </tr>
-      <tr v-for="order in orders" :key="order.id">
-        <td>{{ 1 }}</td>
+      <tr v-for="(order, index) in orders" :key="index">
+        <td>{{ index + 1 }}</td>
         <td>{{ order.name }}</td>
         <td>{{ order.zilla }}</td>
         <td>{{ order.total }}</td>
@@ -41,7 +41,9 @@
         <td></td>
         <td>Total Price</td>
         <td>{{ totaltk }}</td>
-        <td><button>Place Order</button></td>
+        <td>
+          <button v-if="totaltk > 0" @click="placeorder()">Place Order</button>
+        </td>
       </tr>
     </table>
   </div>
@@ -55,6 +57,8 @@
 </template>
 
 <script>
+import Swal from "sweetalert2";
+
 import OrderModal from "../components/orderModal.vue";
 import pageFooter from "../components/pageFooter.vue";
 export default {
@@ -145,6 +149,52 @@ export default {
 
       this.modalvisible = false;
     },
+    placeorder() {
+      axios
+        .post(
+          "orders/place",
+          {
+            user_id: localStorage.getItem("id"),
+            address_id: this.address.id,
+          },
+          {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("token"),
+            },
+          }
+        )
+        .then((response) => {
+          if (response.data.status) {
+            this.sweetalert("Congrats! Order placed successfully");
+            this.$router.push({ name: "placedOrders" });
+          }else{
+            this.failedsweetalert(response.data.log);
+          }
+          console.log(response.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    sweetalert(data) {
+      //console.log(localStorage.getItem("islogged"));
+      Swal.fire({
+        position: "top-end",
+        width: 400,
+        icon: "success",
+        title: data,
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    },
+    failedsweetalert(data) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "sorry, " +data,
+        footer: 'If you have any query please contact us',
+      });
+    },
   },
   created() {
     this.getorders();
@@ -159,7 +209,6 @@ export default {
   margin: 20px;
 }
 table {
-  font-family: arial, sans-serif;
   border-collapse: collapse;
   width: 100%;
 }
@@ -170,15 +219,29 @@ th {
   text-align: center;
   padding: 8px;
 }
+td button {
+  font-family: "Atma", cursive;
+}
 
 tr:nth-child(even) {
   background-color: #dddddd;
 }
 
-.address_btn{
+.address_btn {
   font-size: 20px;
   color: #ff0057;
   cursor: pointer;
   margin-left: 10px;
+}
+
+/*sweet alert style */
+.swal2-title{
+  font-family: 'Open Sans', sans-serif;
+  font-size: 30px !important;
+}
+
+
+.swal2-popup {
+  font-size: 1rem !important;
 }
 </style>

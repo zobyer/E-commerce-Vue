@@ -1,7 +1,13 @@
 <template>
   <div class="table-container">
     <h1>Order List</h1>
-
+    <p>
+      <span> Address: {{ address.description }},    </span>
+      <span v-if="address.phone_no">Contact No: {{ address.phone_no }}    </span>
+      <span @click="modalvisible = true" class="address_btn"
+        ><font-awesome-icon :icon="['fas', 'plus']"
+      /></span>
+    </p>
     <table>
       <tr>
         <th>Sl</th>
@@ -39,13 +45,17 @@
       </tr>
     </table>
   </div>
-  <order-modal />
+  <order-modal
+    v-on:address_added="getlastaddress($event)"
+    v-on:modalvisiblefalse="modalvisible = false"
+    v-if="modalvisible"
+  />
 
   <page-footer />
 </template>
 
 <script>
-import OrderModal from '../components/orderModal.vue';
+import OrderModal from "../components/orderModal.vue";
 import pageFooter from "../components/pageFooter.vue";
 export default {
   components: { pageFooter, OrderModal },
@@ -53,6 +63,8 @@ export default {
     return {
       orders: null,
       totaltk: 0,
+      address: "",
+      modalvisible: false,
     };
   },
   methods: {
@@ -90,15 +102,53 @@ export default {
         .then((response) => {
           this.orders = response.data.data;
           this.totaltk = response.data.totalprice;
-          //console.log(this.orders);
+          //console.log(this.address);
         })
         .catch((err) => {
           console.log(err);
         });
     },
+
+    getlastaddress(value) {
+      if (value == 0) {
+        axios
+          .get("orders/last/address/" + localStorage.getItem("id"), {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("token"),
+            },
+          })
+          .then((response) => {
+            this.address = response.data.data;
+            //console.log(this.address);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      } else {
+        axios
+          .get(
+            "orders/address/id/" + localStorage.getItem("id") + "/" + value,
+            {
+              headers: {
+                Authorization: "Bearer " + localStorage.getItem("token"),
+              },
+            }
+          )
+          .then((response) => {
+            this.address = response.data.data[0];
+            //console.log(this.address);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+
+      this.modalvisible = false;
+    },
   },
   created() {
     this.getorders();
+    this.getlastaddress(0);
   },
 };
 </script>
@@ -125,6 +175,10 @@ tr:nth-child(even) {
   background-color: #dddddd;
 }
 
-.order_btn {
+.address_btn{
+  font-size: 20px;
+  color: #ff0057;
+  cursor: pointer;
+  margin-left: 10px;
 }
 </style>

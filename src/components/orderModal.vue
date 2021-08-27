@@ -1,19 +1,32 @@
 <template>
   <div class="modal-container">
+    <div class="cross_btn" @click="modalvisible"><font-awesome-icon :icon="['fas', 'times']" /></div>
     <form @submit.prevent="addaddress()">
-      <label for="w3review">Add new address </label>
-      <textarea id="w3review" name="w3review" rows="4" cols="50" placeholder="Exmpl house no , road no , post , city"></textarea
-      >
+      <label for="w3review">Add new address *</label>
+      <textarea
+        id="w3review"
+        name="w3review"
+        rows="4"
+        cols="50"
+        placeholder="Exmpl house no , road no , post , city"
+        v-model="description"
+        required
+      ></textarea>
       <div>
-          <label for="phone_no">Phone No</label>
-          <input type="text" name="phone_no" id="phone_no">
+        <label for="phone_no">Phone No</label>
+        <input type="text" name="phone_no" id="phone_no" v-model="phone_no" />
       </div>
       <div>
-          <input type="submit" value="add" />
+        <input type="submit" value="add" />
       </div>
     </form>
     <div class="address_container">
-      <div v-for="address_data in address" :key="address_data.id">
+      <div
+        class="address"
+        v-for="address_data in address"
+        :key="address_data.id"
+        @click="setaddress(address_data.id)"
+      >
         <p>{{ address_data.description }}</p>
       </div>
     </div>
@@ -46,6 +59,7 @@ export default {
           }
         )
         .then((response) => {
+          this.$emit("address_added", 0);
           //console.log("called");
         })
         .catch((err) => {
@@ -68,6 +82,13 @@ export default {
           console.log(err);
         });
     },
+
+    setaddress(id) {
+      this.$emit("address_added", id);
+    },
+    modalvisible(){
+      this.$emit("modalvisiblefalse");
+    }
   },
   created() {
     this.getaddress();
@@ -86,15 +107,27 @@ export default {
   text-align: center;
   border-radius: 15px;
   border: 1px solid black;
+  background: white;
 }
 
 .address_container {
   max-height: 200px;
   overflow-y: scroll;
   overflow-x: hidden;
-  background: blanchedalmond;
-  margin: 5px;
-  border-radius: 10px;
+}
+.address {
+  margin: 3px;
+  border-radius: 5px;
   cursor: pointer;
+  background: blanchedalmond;
+}
+.address p {
+  margin: 0;
+}
+.cross_btn{
+    /* transform: rotate(45deg); */
+    font-size: 30px; 
+    color: #ff0057;
+    cursor: pointer;
 }
 </style>

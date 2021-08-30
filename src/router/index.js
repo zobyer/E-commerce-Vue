@@ -9,6 +9,7 @@ import Image from '../views/foodsInsert.vue'
 import singleFood from '../views/foodDetails.vue'
 import placedOrders from '../views/placeOrders.vue'
 import insertFood from '../views/Admin/insertfood.vue'
+import adminOrders from '../views/Admin/orders.vue'
 
 
 const routes = [
@@ -71,7 +72,13 @@ const routes = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-  }
+  },
+  {
+    path: '/admin/orders/:state',
+    name: 'adminOrders',
+    component: adminOrders
+  },
+  
 ]
 
 const router = createRouter({

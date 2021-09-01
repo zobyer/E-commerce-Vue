@@ -223,9 +223,9 @@ td button {
   font-family: "Atma", cursive;
 }
 
-tr:nth-child(even) {
+/* tr:nth-child(even) {
   background-color: #dddddd;
-}
+} */
 
 .address_btn {
   font-size: 20px;

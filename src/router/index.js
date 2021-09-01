@@ -10,6 +10,8 @@ import singleFood from '../views/foodDetails.vue'
 import placedOrders from '../views/placeOrders.vue'
 import insertFood from '../views/Admin/insertfood.vue'
 import adminOrders from '../views/Admin/orders.vue'
+import adminFoodsList from '../views/Admin/foods.vue'
+import updateFood from '../views/Admin/updateFood.vue'
 
 
 const routes = [
@@ -77,6 +79,16 @@ const routes = [
     path: '/admin/orders/:state',
     name: 'adminOrders',
     component: adminOrders
+  },
+  {
+    path: '/admin/foods',
+    name: 'adminFoodsList',
+    component: adminFoodsList
+  },
+  {
+    path: '/admin/update/food/:id',
+    name: 'updateFood',
+    component: updateFood
   },
   
 ]

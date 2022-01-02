@@ -22,7 +22,6 @@
           type="number"
           id="price"
           name="price"
-          min="0"
           placeholder="Price"
           v-model="price"
           required
@@ -31,7 +30,7 @@
           type="number"
           id="Points"
           name="Points"
-          min="0"
+
           max="10"
           placeholder="Points"
           v-model="points"

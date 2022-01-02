@@ -1,4 +1,6 @@
 <template>
+  <user-top-nav />
+
   <div class="content">
     <div class="textBox">
       <h4>e-ঐতিহ্য food</h4>
@@ -25,9 +27,10 @@
 </template>
 
 <script>
-import pageFooter from '../components/pageFooter.vue';
+import pageFooter from "../components/pageFooter.vue";
+import UserTopNav from "../components/userTopNav.vue";
 export default {
-  components: { pageFooter },
+  components: { pageFooter, UserTopNav },
   setup() {},
 };
 </script>

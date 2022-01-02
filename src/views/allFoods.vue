@@ -1,5 +1,7 @@
-<template >
-  <cart ref="updatecart"/>
+<template>
+  <user-top-nav />
+
+  <cart ref="updatecart" />
   <div>
     <div class="others"></div>
     <h1>খাবারের রাজ্যে আপনাকে স্বাগমত</h1>
@@ -84,7 +86,9 @@
               <p>{{ foods.zilla }}</p>
               <p>{{ foods.price }} Tk.</p>
               <div class="links">
-                <a href="#" v-on:click="addtocart(foods.id)"><font-awesome-icon icon="cart-plus" /></a>
+                <a href="#" v-on:click="addtocart(foods.id)"
+                  ><font-awesome-icon icon="cart-plus"
+                /></a>
                 <router-link
                   :to="{ name: 'singleFood', params: { id: foods.id } }"
                   >Details</router-link
@@ -110,10 +114,11 @@
 <script>
 import Cart from "../components/cart.vue";
 import PageFooter from "../components/pageFooter.vue";
+import UserTopNav from "../components/userTopNav.vue";
 
 export default {
-  components: { PageFooter, Cart },
-  data: function () {
+  components: { PageFooter, Cart, UserTopNav },
+  data: function() {
     return {
       allfoods: null,
       allfoodname: [],
@@ -155,7 +160,7 @@ export default {
       axios
         .get("foods/search/city?name=" + this.cityname, {
           headers: {
-            Authorization: "Bearer "+localStorage.getItem("token"),
+            Authorization: "Bearer " + localStorage.getItem("token"),
           },
         })
         .then((response) => {
@@ -174,7 +179,7 @@ export default {
       axios
         .get("foods/search/food?name=" + this.foodname, {
           headers: {
-            Authorization: "Bearer "+localStorage.getItem("token"),
+            Authorization: "Bearer " + localStorage.getItem("token"),
           },
         })
         .then((response) => {
@@ -191,23 +196,32 @@ export default {
     addtocart(foodid) {
       //console.log(localStorage.getItem("token"))
       axios
-        .post("cart/add" ,
-        {
-          user_id : localStorage.getItem("id"),
-          food_id: foodid
-        },
-        {
-          headers: {
-            Authorization: "Bearer "+localStorage.getItem("token"),
+        .post(
+          "cart/add",
+          {
+            user_id: localStorage.getItem("id"),
+            food_id: foodid,
           },
-        })
+          {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("token"),
+            },
+          }
+        )
         .then((response) => {
-          this.$refs.updatecart.getcart()
+          this.$refs.updatecart.getcart();
           //console.log("called");
         })
         .catch((err) => {
-          console.log(err);
+          console.log(err.response.status);
+          this.checkAuth(err.response.status);
         });
+    },
+
+    checkAuth(status) {
+      if (status == 401) {
+        this.$router.push({ name: "Login" });
+      }
     },
   },
 

@@ -129,7 +129,7 @@ export default {
   margin: 3px;
   border-radius: 5px;
   cursor: pointer;
-  background: blanchedalmond;
+  border: 1px solid black;
 }
 .address p {
   margin: 0;
